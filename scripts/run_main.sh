@@ -109,9 +109,9 @@ BASE_NAME="isaac_ros_dev-$PLATFORM"
 CONTAINER_NAME="$BASE_NAME-container"
 
 # Remove any exited containers.
-if [ "$(docker ps -a --quiet --filter status=exited --filter name=$CONTAINER_NAME)" ]; then
-    docker rm $CONTAINER_NAME > /dev/null
-fi
+# if [ "$(docker ps -a --quiet --filter status=exited --filter name=$CONTAINER_NAME)" ]; then
+#    docker rm $CONTAINER_NAME > /dev/null
+# fi
 
 # Re-use existing container.
 if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
@@ -129,28 +129,28 @@ if [ "$(docker ps -a --quiet --filter name=$CONTAINER_NAME)" ]; then
 fi
 
 # Build image
-IMAGE_KEY=ros2_humble
-if [[ ! -z "${CONFIG_IMAGE_KEY}" ]]; then
-    IMAGE_KEY=$CONFIG_IMAGE_KEY
-fi
-
-BASE_IMAGE_KEY=$PLATFORM.user
-if [[ ! -z "${IMAGE_KEY}" ]]; then
-    BASE_IMAGE_KEY=$PLATFORM.$IMAGE_KEY
-
-    # If the configured key does not have .user, append it last
-    if [[ $IMAGE_KEY != *".user"* ]]; then
-        BASE_IMAGE_KEY=$BASE_IMAGE_KEY.user
-    fi
-fi
-
-print_info "Building $BASE_IMAGE_KEY base as image: $BASE_NAME using key $BASE_IMAGE_KEY"
-$ROOT/build_base_image.sh $BASE_IMAGE_KEY $BASE_NAME '' '' ''
-
-if [ $? -ne 0 ]; then
-    print_error "Failed to build base image: $BASE_NAME, aborting."
-    exit 1
-fi
+# IMAGE_KEY=ros2_humble
+# if [[ ! -z "${CONFIG_IMAGE_KEY}" ]]; then
+#     IMAGE_KEY=$CONFIG_IMAGE_KEY
+# fi
+# 
+# BASE_IMAGE_KEY=$PLATFORM.user
+# if [[ ! -z "${IMAGE_KEY}" ]]; then
+#     BASE_IMAGE_KEY=$PLATFORM.$IMAGE_KEY
+# 
+#     # If the configured key does not have .user, append it last
+#     if [[ $IMAGE_KEY != *".user"* ]]; then
+#         BASE_IMAGE_KEY=$BASE_IMAGE_KEY.user
+#     fi
+# fi
+# 
+# print_info "Building $BASE_IMAGE_KEY base as image: $BASE_NAME using key $BASE_IMAGE_KEY"
+# $ROOT/build_base_image.sh $BASE_IMAGE_KEY $BASE_NAME '' '' ''
+# 
+# if [ $? -ne 0 ]; then
+#     print_error "Failed to build base image: $BASE_NAME, aborting."
+#     exit 1
+# fi
 
 # Map host's display socket to docker
 DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
@@ -213,5 +213,5 @@ docker run -it \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
     --workdir /workspaces/isaac_ros-dev \
     $@ \
-    "isaac-ros/test:version1" \
+    "isaac_ros_dev-aarch64:version3" \
     /bin/bash
