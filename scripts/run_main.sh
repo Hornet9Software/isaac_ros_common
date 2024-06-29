@@ -213,5 +213,5 @@ docker run -it \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
     --workdir /workspaces/isaac_ros-dev \
     $@ \
-    "isaac_ros_dev-aarch64:version3" \
+    "isaac_ros_dev-aarch64:version2" \
     /bin/bash
